@@ -1,0 +1,25 @@
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.ssl/
+
+*.log
+
+tmp/
+*.tmp
+vendor/
+node_modules/
+
+# Ignore build files
+dist/
+build/
+
+# Ignore Docker configuration files
+docker-compose.override.yml
+.docker/
+Dockerfile
+*.Dockerfile
+
+.env
+.env.local

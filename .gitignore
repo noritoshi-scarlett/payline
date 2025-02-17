@@ -1,0 +1,31 @@
+
+.idea/
+.vscode/
+.ssl/
+
+.DS_Store
+Thumbs.db
+
+*.log
+cache/
+*.cache
+tmp/
+*.tmp
+
+# Ignore OS-generated files
+*.swp
+*.bak
+*.old
+
+# Ignore Docker files and directories
+docker-compose.override.yml
+.docker/
+Dockerfile
+*.Dockerfile
+.env
+*.env
+!example.env
+
+# project
+vendor/
+composer.lock
