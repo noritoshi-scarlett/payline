@@ -9,6 +9,7 @@ use Money\Money;
 
 /**
  * @template T of object for $money representation.
+ * @template-implements DataHubEntityInterface<T>
  */
 class MoneyHubEntity implements DataHubEntityInterface
 {
@@ -16,9 +17,15 @@ class MoneyHubEntity implements DataHubEntityInterface
      * @param T $money
      */
     public function __construct(
+        private readonly int $id,
         private readonly object $money,
     )
     {
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     /**

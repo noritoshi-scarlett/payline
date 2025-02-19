@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Payline\App\Interface\Entity\RelatedEntity;
 
-use Payline\App\Interface\Entity\BasicEntityInterface;
+use Payline\App\Infrastructure\Domain\BasicEntityInterface;
 
 /**
  * @template V of object

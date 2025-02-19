@@ -13,6 +13,7 @@ use Payline\App\Interface\Entity\Source\SourceInterface;
 /**
  * @template T of object
  * @template V of object
+ * @template-extends LogAbstractFactory<T, V>
  */
 class PaymentLogFactory extends LogAbstractFactory
 {

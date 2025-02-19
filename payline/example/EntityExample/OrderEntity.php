@@ -7,15 +7,16 @@ use Payline\App\Interface\Entity\RelatedEntity\RelatedEntityInterface;
 
 /**
  * @template V of object
+ * @template-implements RelatedEntityInterface<V>
  */
-class OrderEntity implements RelatedEntityInterface
+readonly class OrderEntity implements RelatedEntityInterface
 {
     /**
      * @param V $coreEntity
      */
     public function __construct(
-        private readonly int $id,
-        private readonly object $coreEntity
+        private int    $id,
+        private object $coreEntity
     )
     {
     }

@@ -15,7 +15,7 @@ use Payline\App\Interface\Repository\LogRepositoryInterface;
 /**
  * @template T of object
  * @template V of object
- * @implements LogEntityInterface<T, V>
+ * @template-implements LogEntityInterface<T, V>
  */
 readonly class LogRepository implements LogRepositoryInterface
 {
@@ -87,7 +87,7 @@ readonly class LogRepository implements LogRepositoryInterface
             $statement = $this->PDO->prepare($query);
 
             $statement->bindValue(':sourceId', $source->getId(), \PDO::PARAM_INT);
-            $statement->bindValue(':state', $state->getValue(), \PDO::PARAM_STR);
+            $statement->bindValue(':state', $state->value, \PDO::PARAM_STR);
 
             $statement->execute();
 

@@ -4,14 +4,14 @@ declare(strict_types=1);
 namespace Payline\App\Application\Service;
 
 use Payline\App\Application\Exception\InvalidArgumentException;
-use Payline\App\Application\Library\EntitySorter;
+use Payline\App\Application\Library\Sorter\EntitySorter;
 use Payline\App\Application\Provider\CacheServiceCursor;
 use Payline\App\Domain\Cache\CacheServiceInterface;
-use Payline\App\Interface\Entity\BasicEntityInterface;
+use Payline\App\Infrastructure\Domain\BasicEntityInterface;
 
 /**
- * @template K of BasicEntityInterface
- * @implements CacheServiceInterface<K>
+ * @template EntityType of BasicEntityInterface
+ * @template-implements CacheServiceInterface<EntityType>
  */
 class CacheService implements CacheServiceInterface
 {
@@ -21,7 +21,7 @@ class CacheService implements CacheServiceInterface
     private const array SINGLE_RECORD_FLAGS = [self::GET_NEWEST, self::GET_FIRST];
 
     /**
-     * @var \WeakMap<K, array>
+     * @var \WeakMap<EntityType, array>
      */
     private \WeakMap $cachingEntitiesDataMap;
     private array $cache;
@@ -33,24 +33,24 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
-     * @preturn CacheServiceCursor<K>
+     * @preturn CacheServiceCursor<EntityType>
      */
     public function getCursor(array $properties, array $flags): CacheServiceCursor
     {
-        /** @var CacheServiceCursor<K> return */
+        /** @var CacheServiceCursor<EntityType> return */
         return new CacheServiceCursor($this, $properties, $flags);
     }
 
     /**
-     * @param iterable<K> $foundByParameters
+     * @param array<EntityType> $foundByParameters
      * @param array $flags Use some from public const.
      * @throws InvalidArgumentException
      */
-    public function saveCollectionInCache(iterable $foundByParameters, array $parameters, array $flags = []): self
+    public function saveCollectionInCache(array $foundByParameters, array $parameters, array $flags = []): self
     {
         $cursor = $this->getCursorFromParameters($parameters, $flags);
 
-        /** EntitySorter<K> */
+        /** EntitySorter<EntityType> */
         EntitySorter::sortByDate($foundByParameters);
 
         $itemsCount = 0;
@@ -87,7 +87,7 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
-     * @return array<K>|false Return empty array if cached result is "not found", false if cache not exist.
+     * @return array<EntityType>|false Return empty array if cached result is "not found", false if cache not exist.
      * @throws InvalidArgumentException
      */
     public function getCachedCollectionByParameters(array $parameters, array $flags = []): array|false
@@ -104,7 +104,7 @@ class CacheService implements CacheServiceInterface
     }
 
     /**
-     * @return K|null Return null if not found in cache.
+     * @return EntityType|null Return null if not found in cache.
      * @throws InvalidArgumentException
      */
     public function getCachedRecordByParameters(array $parameters, array $flags = []): null|object

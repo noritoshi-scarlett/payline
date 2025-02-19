@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Payline\App\Interface\Entity;
+namespace Payline\App\Infrastructure\Domain;
 
 interface BasicEntityInterface
 {

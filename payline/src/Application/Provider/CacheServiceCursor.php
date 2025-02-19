@@ -5,7 +5,7 @@ namespace Payline\App\Application\Provider;
 
 use Payline\App\Application\Exception\InvalidArgumentException;
 use Payline\App\Domain\Cache\CacheServiceInterface;
-use Payline\App\Interface\Entity\BasicEntityInterface;
+use Payline\App\Infrastructure\Domain\BasicEntityInterface;
 
 /**
  * @template K of BasicEntityInterface
@@ -24,7 +24,7 @@ readonly class CacheServiceCursor
     }
 
     /**
-     * @param callable():iterable<K> $callable
+     * @param callable():array<K> $callable
      * @return array<K>
      * @throws InvalidArgumentException
      */

@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Payline\App\Interface\Entity\DataHubEntity;
 
+use Payline\App\Infrastructure\Domain\BasicEntityInterface;
+
 /**
  * @template T of object
  */
-interface DataHubEntityInterface
+interface DataHubEntityInterface extends BasicEntityInterface
 {
     /**
      * @return T

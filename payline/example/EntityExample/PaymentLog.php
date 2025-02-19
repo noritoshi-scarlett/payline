@@ -11,6 +11,7 @@ use Payline\App\Interface\Entity\Source\SourceInterface;
 /**
  * @template T of object for DataHubEntityInterface
  * @template V of object for RelatedEntityCollectionInterface
+ * @template-implements LogEntityInterface<T, V>
  */
 class PaymentLog implements LogEntityInterface
 {
@@ -51,7 +52,7 @@ class PaymentLog implements LogEntityInterface
         $this->message = $message;
     }
 
-    public function getState(): StateEnumInterface&\BackedEnum
+    public function getState(): StateEnumInterface
     {
         return $this->state;
     }

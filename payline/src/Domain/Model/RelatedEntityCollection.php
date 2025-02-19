@@ -10,6 +10,7 @@ use Payline\App\Interface\Entity\RelatedEntity\RelatedEntityInterface;
 /**
  * @template T of object for DataHubEntityInterface
  * @template V of object for RelatedEntityInterface
+ * @template-implements RelatedEntityCollectionInterface<T, V>
  */
 readonly class RelatedEntityCollection implements RelatedEntityCollectionInterface
 {

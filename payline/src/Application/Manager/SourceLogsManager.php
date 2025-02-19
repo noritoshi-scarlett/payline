@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Payline\App\Application\Manager;
 
 use Payline\App\Application\Exception\InvalidArgumentException;
+use Payline\App\Application\Library\Normalizer\CollectionNormalizer;
 use Payline\App\Application\Provider\CacheServiceCursor;
 use Payline\App\Application\Service\CacheService;
 use Payline\App\Interface\Entity\LogEntity\LogEntityInterface;
@@ -32,7 +33,7 @@ readonly class SourceLogsManager
      * @return array<LogEntityInterface<T, V>>
      * @throws InvalidArgumentException
      */
-    public function getLogsForSourceAndState(SourceInterface $source, StateEnumInterface&\BackedEnum $state): array
+    public function getLogsForSourceAndState(SourceInterface $source, StateEnumInterface $state): array
     {
         $parameters = [$source::class => $source->getId(), $state::class => $state->name];
 
@@ -40,8 +41,8 @@ readonly class SourceLogsManager
         $cursor = $this->logCacheService->getCursor($parameters, [CacheService::GET_ALL]);
         return $cursor->loadCollection(
             /**
-             * @@return iterable<LogEntityInterface<T, V>>
+             * @return array<LogEntityInterface<T, V>>
              */
-            fn(): iterable => $this->logRepository->findBySourceAndState($source, $state));
+            fn():array => CollectionNormalizer::toArray($this->logRepository->findBySourceAndState($source, $state)));
     }
 }

@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Payline\App\Interface\Repository;
 
+use Payline\App\Infrastructure\Domain\BasicRepositoryInterface;
 use Payline\App\Interface\Entity\Source\SourceInterface;
 
-interface SourceRepositoryInterface
+interface SourceRepositoryInterface extends BasicRepositoryInterface
 {
     /**
      * @return iterable<SourceInterface>

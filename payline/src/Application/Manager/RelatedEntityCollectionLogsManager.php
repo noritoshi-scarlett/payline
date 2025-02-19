@@ -6,6 +6,7 @@ namespace Payline\App\Application\Manager;
 use Payline\App\Application\Exception\InvalidArgumentException;
 use Payline\App\Application\Exception\InvalidLogStateEnumException;
 use Payline\App\Application\Factory\LogAbstractFactory;
+use Payline\App\Application\Library\Normalizer\CollectionNormalizer;
 use Payline\App\Application\Provider\CacheServiceCursor;
 use Payline\App\Application\Service\CacheService;
 use Payline\App\Domain\Entity\RelatedEntityCollection\RelatedEntityCollectionInterface;
@@ -63,7 +64,7 @@ readonly class RelatedEntityCollectionLogsManager
         if ($this->logRepository->save($log)) {
             return $log;
         }
-        //TODO throw repositoruy exception
+        throw new InvalidArgumentException('Log could not be saved, because repository have problems. Check logs for more information');
     }
 
     /**
@@ -110,9 +111,9 @@ readonly class RelatedEntityCollectionLogsManager
         $cursor = $this->logCacheService->getCursor($parameters, [CacheService::GET_ALL]);
         return $cursor->loadCollection(
             /**
-             * @@return iterable<LogEntityInterface<T, V>>
+             * @return array<LogEntityInterface<T, V>>
              */
-            fn(): iterable => $this->logRepository->getAllForRelatedEntityCollection($relatedEntityCollection)
+            fn():array => CollectionNormalizer::toArray($this->logRepository->getAllForRelatedEntityCollection($relatedEntityCollection))
         );
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Payline\App\Interface\Repository;
 
 use Payline\App\Domain\Entity\RelatedEntityCollection\RelatedEntityCollectionInterface;
+use Payline\App\Infrastructure\Domain\BasicRepositoryInterface;
 use Payline\App\Interface\Entity\LogEntity\LogEntityInterface;
 use Payline\App\Interface\Entity\LogEntity\StateEnum\StateEnumInterface;
 use Payline\App\Interface\Entity\Source\SourceInterface;
@@ -12,7 +13,7 @@ use Payline\App\Interface\Entity\Source\SourceInterface;
  * @template T of object
  * @template V of object
  */
-interface LogRepositoryInterface
+interface LogRepositoryInterface extends BasicRepositoryInterface
 {
     /**
      * @param RelatedEntityCollectionInterface<V> $relatedEntityCollection

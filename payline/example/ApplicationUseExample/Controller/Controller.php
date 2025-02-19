@@ -29,6 +29,9 @@ class Controller
     {
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function addNewLogForSingleOrder(): void
     {
         $orderOne = new Order(1, ['name' => 'test'], new OrderPrice(
@@ -57,7 +60,7 @@ class Controller
              * @param iterable<Money> $orderPriceList
              * @return MoneyHubEntity<Money>
              */
-            fn(iterable $orderPriceList): DataHubEntityInterface => new MoneyHubEntity(Money::sum(...$orderPriceList))
+            fn(iterable $orderPriceList): DataHubEntityInterface => new MoneyHubEntity(1, Money::sum(...$orderPriceList))
         );
 
         $source = new Source(1, 'Platnosc-ZBZIK-owana');

@@ -1,6 +1,6 @@
 <?php
 
-use Payline\App\Interface\Entity\BasicEntityInterface;
+use Payline\App\Infrastructure\Domain\BasicEntityInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 function autoloading(
