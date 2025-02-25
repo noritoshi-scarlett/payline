@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Payline\Example\ApplicationUseExample\Controller\Controller;
+use Payline\Example\Payment\Application\Controller\Controller;
 
 $container = require __DIR__ . '/config/autoload.php';
 

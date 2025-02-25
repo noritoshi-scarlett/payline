@@ -4,12 +4,16 @@ declare(strict_types=1);
 namespace Payline\App\Application\Manager;
 
 use Payline\App\Application\Exception\InvalidArgumentException;
-use Payline\App\Application\Exception\InvalidLogStateEnumException;
+use Payline\App\Application\Exception\Validation\InvalidDateException;
+use Payline\App\Application\Exception\Validation\InvalidLogStateEnumException;
 use Payline\App\Application\Factory\LogAbstractFactory;
-use Payline\App\Application\Library\Normalizer\CollectionNormalizer;
-use Payline\App\Application\Provider\CacheServiceCursor;
-use Payline\App\Application\Service\CacheService;
+use Payline\App\Application\Utility\Normalizer\CollectionNormalizer;
+use Payline\App\Application\Utility\Sorter\EntitySorter;
+use Payline\App\Application\Utility\Sorter\SortDirectionEnum;
+use Payline\App\Application\Utility\Validator\LogValidator;
 use Payline\App\Domain\Entity\RelatedEntityCollection\RelatedEntityCollectionInterface;
+use Payline\App\Infrastructure\Library\Cache\Entity\CacheService;
+use Payline\App\Infrastructure\Library\Cache\Entity\CacheServiceCursor;
 use Payline\App\Interface\Entity\LogEntity\LogEntityInterface;
 use Payline\App\Interface\Entity\LogEntity\StateEnum\StateEnumInterface;
 use Payline\App\Interface\Entity\Source\SourceInterface;
@@ -38,6 +42,7 @@ readonly class RelatedEntityCollectionLogsManager
      * @return LogEntityInterface<T, V>
      * @throws InvalidLogStateEnumException
      * @throws InvalidArgumentException
+     * @throws InvalidDateException
      */
     public function createLog(
         SourceInterface                  $source,
@@ -47,9 +52,12 @@ readonly class RelatedEntityCollectionLogsManager
         \DateTimeImmutable               $createdAt,
     ): LogEntityInterface
     {
-        if (!$this->isStateAllowedForNextLog($source, $relatedEntityCollection, $state)) {
-            throw new InvalidLogStateEnumException(sprintf('State [%s] is not allowed for next log', $state::class));
-        }
+        LogValidator::newLogDataCompareToNewestLog(
+                $this->getNewestLog($relatedEntityCollection),
+                $source,
+                $state,
+                $createdAt
+        );
 
         /** @var LogEntityInterface<T, V> $log */
         $log = $this->logFactory->createLogEntity(
@@ -60,26 +68,10 @@ readonly class RelatedEntityCollectionLogsManager
             $createdAt,
         );
 
-
         if ($this->logRepository->save($log)) {
             return $log;
         }
         throw new InvalidArgumentException('Log could not be saved, because repository have problems. Check logs for more information');
-    }
-
-    /**
-     * @throws InvalidArgumentException
-     */
-    public function isStateAllowedForNextLog(
-        SourceInterface $source,
-        RelatedEntityCollectionInterface $relatedEntityCollection,
-        StateEnumInterface $state
-    ): bool
-    {
-        return $source->isStateAllowedForNextLog(
-            $this->getNewestLog($relatedEntityCollection),
-            $state
-        );
     }
 
     /**
@@ -91,10 +83,10 @@ readonly class RelatedEntityCollectionLogsManager
         $parameters = [$relatedEntityCollection::class => $relatedEntityCollection->getId()];
 
         /** @var CacheServiceCursor<LogEntityInterface<T, V>> $cursor */
-        $cursor = $this->logCacheService->getCursor($parameters, [CacheService::GET_NEWEST]);
+        $cursor = $this->logCacheService->getCursor($parameters, [CacheService::SINGLE_NEWEST_FLAG]);
         return $cursor->loadSingle(
             /**
-             * @@return LogEntityInterface<T, V>|null
+             * @return LogEntityInterface<T, V>|null
              */
             fn(): ?LogEntityInterface => $this->logRepository->getNewestForRelatedEntityCollection($relatedEntityCollection)
         );
@@ -108,12 +100,16 @@ readonly class RelatedEntityCollectionLogsManager
         $parameters = [$relatedEntityCollection::class => $relatedEntityCollection->getId()];
 
         /** @var CacheServiceCursor<LogEntityInterface<T, V>> $cursor */
-        $cursor = $this->logCacheService->getCursor($parameters, [CacheService::GET_ALL]);
+        $cursor = $this->logCacheService->getCursor($parameters, [CacheService::ALL_FLAG]);
         return $cursor->loadCollection(
-            /**
-             * @return array<LogEntityInterface<T, V>>
-             */
-            fn():array => CollectionNormalizer::toArray($this->logRepository->getAllForRelatedEntityCollection($relatedEntityCollection))
+        /**
+         * @return array<LogEntityInterface<T, V>>
+         * @throws InvalidArgumentException
+         */
+            fn():array => EntitySorter::sortByDate(
+                CollectionNormalizer::toArray($this->logRepository->getAllForRelatedEntityCollection($relatedEntityCollection)),
+                SortDirectionEnum::DESCENDING
+            )
         );
     }
 }

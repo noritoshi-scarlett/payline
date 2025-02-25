@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace Payline\App\Interface\Entity\LogEntity\StateEnum;
 
-use Payline\Example\EntityExample\PaymentLogEnum;
-use Payline\App\Application\Exception\InvalidLogStateEnumException;
+use Payline\App\Application\Exception\Validation\InvalidLogStateEnumException;
+use Payline\Example\Payment\Plugin\PayU\Domain\Entity\PayUPaymentLogEnum;
 
 class StateEnumGraphCheck
 {
     /**
      * @param StateEnumInterface $currentState
-     * @return array<PaymentLogEnum>
+     * @return array<PayUPaymentLogEnum>
      * @throws InvalidLogStateEnumException
      */
     public static function getStatesPossibleToTransitionFromCurrent(StateEnumInterface $currentState): array

@@ -4,9 +4,11 @@ declare(strict_types=1);
 namespace Payline\App\Application\Manager;
 
 use Payline\App\Application\Exception\InvalidArgumentException;
-use Payline\App\Application\Library\Normalizer\CollectionNormalizer;
-use Payline\App\Application\Provider\CacheServiceCursor;
-use Payline\App\Application\Service\CacheService;
+use Payline\App\Application\Utility\Normalizer\CollectionNormalizer;
+use Payline\App\Application\Utility\Sorter\EntitySorter;
+use Payline\App\Application\Utility\Sorter\SortDirectionEnum;
+use Payline\App\Infrastructure\Library\Cache\Entity\CacheService;
+use Payline\App\Infrastructure\Library\Cache\Entity\CacheServiceCursor;
 use Payline\App\Interface\Entity\LogEntity\LogEntityInterface;
 use Payline\App\Interface\Entity\LogEntity\StateEnum\StateEnumInterface;
 use Payline\App\Interface\Entity\Source\SourceInterface;
@@ -38,11 +40,16 @@ readonly class SourceLogsManager
         $parameters = [$source::class => $source->getId(), $state::class => $state->name];
 
         /** @var CacheServiceCursor<LogEntityInterface<T, V>> $cursor */
-        $cursor = $this->logCacheService->getCursor($parameters, [CacheService::GET_ALL]);
+        $cursor = $this->logCacheService->getCursor($parameters, [CacheService::ALL_FLAG]);
         return $cursor->loadCollection(
-            /**
-             * @return array<LogEntityInterface<T, V>>
-             */
-            fn():array => CollectionNormalizer::toArray($this->logRepository->findBySourceAndState($source, $state)));
+        /**
+         * @return array<LogEntityInterface<T, V>>
+         * @throws InvalidArgumentException
+         */
+            fn():array => EntitySorter::sortById(
+                CollectionNormalizer::toArray($this->logRepository->findBySourceAndState($source, $state)),
+                SortDirectionEnum::ASCENDING
+            )
+        );
     }
 }

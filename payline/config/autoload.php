@@ -5,6 +5,10 @@ include __DIR__ . '/../../vendor/autoload.php';
 require __DIR__ . '/autoload_functions.php';
 require __DIR__ . '/database.php';
 
+use Payline\Example\Domain\Repository\LogRepository;
+use Payline\Example\Domain\Repository\SourceRepository;
+use Payline\Example\Payment\Application\Factory\PaymentLogFactory;
+use Payline\Example\Payment\Domain\Entity\PaymentSource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 $container = new ContainerBuilder();
@@ -15,17 +19,17 @@ $container
     ->setPublic(true);
 
 $interfaceToImplementationMap = [
-    Payline\App\Interface\Repository\LogRepositoryInterface::class => Payline\Example\DatabaseImplementationExample\LogRepository::class,
-    Payline\App\Application\Factory\LogAbstractFactory::class => Payline\Example\ApplicationUseExample\PaymentLogFactory::class,
-    Payline\App\Interface\Entity\Source\SourceInterface::class => Payline\Example\EntityExample\Source::class
+    Payline\App\Interface\Repository\LogRepositoryInterface::class => LogRepository::class,
+    Payline\App\Application\Factory\LogAbstractFactory::class => PaymentLogFactory::class,
+    Payline\App\Interface\Entity\Source\SourceInterface::class => PaymentSource::class
 
 ];
 
 $argumentMapping = [
-    Payline\Example\DatabaseImplementationExample\LogRepository::class => [
+    LogRepository::class => [
         '$tableName' => 'payment_log',
     ],
-    Payline\Example\DatabaseImplementationExample\SourceRepository::class => [
+    SourceRepository::class => [
         '$tableName' => 'source',
     ],
 ];
