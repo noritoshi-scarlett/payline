@@ -35,6 +35,7 @@ readonly class RelatedEntityCollectionLogsManager
         private LogRepositoryInterface $logRepository,
         private LogAbstractFactory     $logFactory,
     ) {
+        $this->logCacheService->autosave = true;
     }
 
     /**

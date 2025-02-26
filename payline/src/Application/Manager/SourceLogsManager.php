@@ -29,6 +29,7 @@ readonly class SourceLogsManager
         private LogRepositoryInterface $logRepository,
     )
     {
+        $this->logCacheService->autosave = true;
     }
 
     /**

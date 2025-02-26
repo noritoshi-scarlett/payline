@@ -7,7 +7,6 @@
 Thumbs.db
 
 *.log
-cache/
 *.cache
 tmp/
 *.tmp
