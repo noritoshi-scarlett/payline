@@ -36,7 +36,7 @@ interface CacheServiceInterface
     public function saveSingleRecordInCache(?object $singleRecord, array $parameters, array $flags): self;
 
     /**
-     * @return EntityType|false Return empty array if cached result is "not found", false if cache not exist.
+     * @return array<EntityType>|false Return empty array if cached result is "not found", false if cache not exist.
      * @throws InvalidArgumentException
      */
     public function getCachedCollectionByParameters(array $parameters, array $flags = []): array|false;

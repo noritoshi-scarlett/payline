@@ -34,16 +34,20 @@ readonly class CacheServiceCursor
         if (false === $cachedData) {
             /** @var array<EntityType> $freshResults */
             $freshResults = $callable();
-            return $this->cacheService
-                ->saveCollectionInCache($freshResults, $this->parameters, $this->flags, $this->sorter)
+            $cachedData = $this->cacheService
+                ->saveCollectionInCache($freshResults, $this->parameters, $this->flags)
                 ->getCachedCollectionByParameters($this->parameters, $this->flags);
+            if (!is_array($cachedData)) {
+                //TODO Exception throw about infrastructure error
+            }
+            return $cachedData;
         }
 
         return $cachedData;
     }
 
     /**
-     * @param callable():EntityType $callable
+     * @param callable():EntityType $callable Allow to return null.
      * @return null|EntityType
      * @throws InvalidArgumentException
      */
@@ -57,9 +61,13 @@ readonly class CacheServiceCursor
         /** @var null|EntityType $freshResult */
         $freshResult = $callable();
         if (isset($freshResult)) {
-            return $this->cacheService
+            $cachedRecord = $this->cacheService
                 ->saveSingleRecordInCache($freshResult, $this->parameters, $this->flags)
                 ->getCachedRecordByParameters($this->parameters, $this->flags);
+            if (!isset($cachedRecord)) {
+                //TODO Exception throw about infrastructure error
+            }
+            return $cachedRecord;
         }
         return null;
     }

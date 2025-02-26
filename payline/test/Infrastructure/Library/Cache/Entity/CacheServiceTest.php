@@ -41,7 +41,7 @@ class CacheServiceTest extends TestCase
         $this->cacheSystemMock->expects($this->once())->method('loadAllKeys')->willReturn(['key1', 'key2']);
         $this->cacheSystemMock->expects($invokedCount)->method('getByKey')
             ->willReturnCallback(function($parameters) use(&$invokedCount) {
-               return  match ($invokedCount->numberOfInvocations()) {
+               return match ($invokedCount->numberOfInvocations()) {
                     1 => [(object)['property1' => 'data1']],
                     2 => [(object)['property1' => 'data2']]
                 };
