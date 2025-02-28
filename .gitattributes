@@ -1,4 +1,10 @@
 /payline/config export-ignore
 /payline/example export-ignore
 /payline/test export-ignore
-!.gitattributes
+.dockerignore
+.gitattributes
+.gitignore
+composer.dev.json
+docker-compose.yml
+example.env
+phpunit.xml
