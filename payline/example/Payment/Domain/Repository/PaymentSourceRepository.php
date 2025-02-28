@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Noritoshi\Payline\Example\Domain\Repository;
+namespace Noritoshi\Payline\Example\Payment\Domain\Repository;
 
 use Noritoshi\Payline\Example\Payment\Domain\Entity\PaymentSource;
 use Noritoshi\Payline\Interface\Entity\Source\SourceInterface;
 use Noritoshi\Payline\Interface\Repository\SourceRepositoryInterface;
 use PDO;
 
-readonly class SourceRepository implements SourceRepositoryInterface
+readonly class PaymentSourceRepository implements SourceRepositoryInterface
 {
     public function __construct(
         private PDO   $PDO,

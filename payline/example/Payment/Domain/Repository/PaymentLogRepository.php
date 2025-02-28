@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Noritoshi\Payline\Example\Domain\Repository;
+namespace Noritoshi\Payline\Example\Payment\Domain\Repository;
 
 use Noritoshi\Payline\Application\Exception\EntityMappingException;
 use Noritoshi\Payline\Domain\Entity\RelatedEntityCollection\RelatedEntityCollectionInterface;
+use Noritoshi\Payline\Example\Payment\Domain\Entity\PaymentLog;
+use Noritoshi\Payline\Example\Payment\Plugin\PayU\Domain\Entity\PayUPaymentLogEnum;
 use Noritoshi\Payline\Interface\Entity\LogEntity\LogEntityInterface;
 use Noritoshi\Payline\Interface\Entity\LogEntity\StateEnum\StateEnumInterface;
 use Noritoshi\Payline\Interface\Entity\Source\SourceInterface;
 use Noritoshi\Payline\Interface\Repository\LogRepositoryInterface;
-use Noritoshi\Payline\Example\Payment\Domain\Entity\PaymentLog;
-use Noritoshi\Payline\Example\Payment\Plugin\PayU\Domain\Entity\PayUPaymentLogEnum;
 use PDO;
 
 /**
@@ -18,7 +18,7 @@ use PDO;
  * @template V of object
  * @template-implements LogEntityInterface<T, V>
  */
-readonly class LogRepository implements LogRepositoryInterface
+readonly class PaymentLogRepository implements LogRepositoryInterface
 {
     public function __construct(
         private PDO   $PDO,

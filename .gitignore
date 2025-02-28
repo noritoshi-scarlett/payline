@@ -26,6 +26,8 @@ Dockerfile
 !example.env
 
 # project
+test-build/
 vendor/
 composer.lock
+composer.dev.lock
 .phpunit.result.cache

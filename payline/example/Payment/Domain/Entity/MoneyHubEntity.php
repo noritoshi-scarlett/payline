@@ -12,9 +12,6 @@ use Noritoshi\Payline\Interface\Entity\DataHubEntity\DataHubEntityInterface;
  */
 readonly class MoneyHubEntity implements DataHubEntityInterface
 {
-    /**
-     * @param Money $money
-     */
     public function __construct(
         private int    $id,
         private Money $money,

@@ -3,20 +3,17 @@ declare(strict_types=1);
 
 namespace Noritoshi\Payline\Example\Payment\Domain\Entity;
 
+use Noritoshi\Payline\Example\Order\Domain\Entity\Order;
 use Noritoshi\Payline\Interface\Entity\RelatedEntity\RelatedEntityInterface;
 
 /**
- * @template V of object
- * @template-implements RelatedEntityInterface<V>
+ * @template-implements RelatedEntityInterface<Order>
  */
-readonly class OrderEntity implements RelatedEntityInterface
+readonly class OrderDecorator implements RelatedEntityInterface
 {
-    /**
-     * @param V $coreEntity
-     */
     public function __construct(
         private int    $id,
-        private object $coreEntity
+        private Order $coreEntity
     )
     {
     }
@@ -27,9 +24,9 @@ readonly class OrderEntity implements RelatedEntityInterface
     }
 
     /**
-     * @return V
+     * @return Order
      */
-    public function getCoreEntity()
+    public function getCoreEntity(): object
     {
         return $this->coreEntity;
     }

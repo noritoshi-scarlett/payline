@@ -11,24 +11,24 @@ use Noritoshi\Payline\Application\Exception\Validation\InvalidLogStateEnumExcept
 use Noritoshi\Payline\Application\Factory\CacheServiceFactory;
 use Noritoshi\Payline\Application\Manager\RelatedEntityCollectionLogsManager;
 use Noritoshi\Payline\Domain\Entity\RelatedEntityCollection\RelatedEntityCollection;
-use Noritoshi\Payline\Interface\Entity\DataHubEntity\DataHubEntityInterface;
-use Noritoshi\Payline\Interface\Entity\RelatedEntity\RelatedEntityInterface;
-use Noritoshi\Payline\Example\Domain\Repository\LogRepository;
 use Noritoshi\Payline\Example\Order\Domain\Entity\Order;
 use Noritoshi\Payline\Example\Order\Domain\Entity\OrderPrice;
 use Noritoshi\Payline\Example\Payment\Application\Factory\PaymentLogFactory;
 use Noritoshi\Payline\Example\Payment\Domain\Entity\MoneyHubEntity;
-use Noritoshi\Payline\Example\Payment\Domain\Entity\OrderEntity;
+use Noritoshi\Payline\Example\Payment\Domain\Entity\OrderDecorator;
 use Noritoshi\Payline\Example\Payment\Domain\Entity\PaymentLog;
 use Noritoshi\Payline\Example\Payment\Domain\Entity\PaymentSource;
+use Noritoshi\Payline\Example\Payment\Domain\Repository\PaymentLogRepository;
 use Noritoshi\Payline\Example\Payment\Plugin\PayU\Domain\Entity\PayUPaymentLogEnum;
+use Noritoshi\Payline\Interface\Entity\DataHubEntity\DataHubEntityInterface;
+use Noritoshi\Payline\Interface\Entity\RelatedEntity\RelatedEntityInterface;
 
 class Controller
 {
     public function __construct(
-        private readonly LogRepository $logRepository,
-        private readonly PaymentLogFactory $logFactory,
-        private readonly CacheServiceFactory $cacheServiceFactory,
+        private readonly PaymentLogRepository $logRepository,
+        private readonly PaymentLogFactory    $logFactory,
+        private readonly CacheServiceFactory  $cacheServiceFactory,
     )
     {
     }
@@ -47,8 +47,8 @@ class Controller
         $orderCollection = new RelatedEntityCollection(
             1,
             [
-                new OrderEntity(1, $orderOne),
-                new OrderEntity(2, $orderTwo)
+                new OrderDecorator(1, $orderOne),
+                new OrderDecorator(2, $orderTwo)
             ],
         );
 

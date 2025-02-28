@@ -13,3 +13,8 @@
 - używany z Dockerem
 - posiada testy napisane w PHPUnit
 - *jest w fazie rozwoju*
+
+## Uruchamianie tetsów:
+```
+XDEBUG_MODE=coverage php vendor/bin/phpunit --display-warnings --coverage-html payline/test-build/coverage
+```

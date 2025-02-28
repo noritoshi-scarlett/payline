@@ -70,6 +70,7 @@ class RelatedEntityCollectionTest extends TestCase
 
     /**
      * @throws Exception
+     * @throws \ErrorException
      */
     public function testGetRelatedEntityThrowsExceptionForInvalidIndex(): void
     {
@@ -78,7 +79,17 @@ class RelatedEntityCollectionTest extends TestCase
         $relatedEntityCollection = new RelatedEntityCollection(1, [$mockEntity1]);
 
         $this->expectException(\Error::class);
-        $relatedEntityCollection->getRelatedEntity(5);
+        $this->expectException(\ErrorException::class);
+
+        set_error_handler(function ($errno, $errstr) {
+            throw new \ErrorException($errstr, $errno);
+        });
+
+        try {
+            $relatedEntityCollection->getRelatedEntity(5);
+        } finally {
+            restore_error_handler();
+        }
     }
 
     /**

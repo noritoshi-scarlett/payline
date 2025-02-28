@@ -39,10 +39,8 @@ function autoloading(
                     }
                 }
                 //Skip Mapping
-                foreach ($classesToSkip as $classToSkip) {
-                    if ($className === $classToSkip) {
-                        continue 2;
-                    }
+                if (in_array($className, $classesToSkip, true)) {
+                    continue;
                 }
                 // Build definition
                 $definition = $container

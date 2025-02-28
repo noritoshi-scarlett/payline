@@ -13,5 +13,5 @@ interface RelatedEntityInterface extends BasicEntityInterface
     /**
      * @return V
      */
-    public function getCoreEntity();
+    public function getCoreEntity(): object;
 }
