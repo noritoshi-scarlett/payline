@@ -3,14 +3,15 @@ declare(strict_types=1);
 
 namespace Noritoshi\Payline\Example\Domain\Repository;
 
-use Noritoshi\Payline\Interface\Entity\LogEntity\StateEnum\StateEnumInterface;
+use Noritoshi\Payline\Example\Payment\Domain\Entity\PaymentSource;
 use Noritoshi\Payline\Interface\Entity\Source\SourceInterface;
 use Noritoshi\Payline\Interface\Repository\SourceRepositoryInterface;
+use PDO;
 
 readonly class SourceRepository implements SourceRepositoryInterface
 {
     public function __construct(
-        private \PDO   $PDO,
+        private PDO   $PDO,
         private string $tableName
     ) {}
 
@@ -19,7 +20,7 @@ readonly class SourceRepository implements SourceRepositoryInterface
         $query = sprintf('SELECT * FROM %s', $this->tableName);
         $statement = $this->PDO->query($query);
 
-        while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
             yield $this->mapRowToEntity($row);
         }
     }
@@ -29,10 +30,10 @@ readonly class SourceRepository implements SourceRepositoryInterface
         $query = sprintf('SELECT * FROM %s WHERE id = :id', $this->tableName);
         $statement = $this->PDO->prepare($query);
 
-        $statement->bindValue(':id', $id, \PDO::PARAM_INT);
+        $statement->bindValue(':id', $id, PDO::PARAM_INT);
         $statement->execute();
 
-        $row = $statement->fetch(\PDO::FETCH_ASSOC);
+        $row = $statement->fetch(PDO::FETCH_ASSOC);
         return $row ? $this->mapRowToEntity($row) : null;
     }
 
@@ -40,17 +41,16 @@ readonly class SourceRepository implements SourceRepositoryInterface
     {
         if ($source->getId() === null) {
             // Insert
-            $query = sprintf('INSERT INTO %s (name, state) VALUES (:name, :state)', $this->tableName);
+            $query = sprintf('INSERT INTO %s (name) VALUES (:name)', $this->tableName);
             $statement = $this->PDO->prepare($query);
         } else {
             // Update
-            $query = sprintf('UPDATE %s SET name = :name, state = :state WHERE id = :id', $this->tableName);
+            $query = sprintf('UPDATE %s SET name = :name WHERE id = :id', $this->tableName);
             $statement = $this->PDO->prepare($query);
-            $statement->bindValue(':id', $source->getId(), \PDO::PARAM_INT);
+            $statement->bindValue(':id', $source->getId(), PDO::PARAM_INT);
         }
 
-        $statement->bindValue(':name', $source->getName(), \PDO::PARAM_STR);
-        $statement->bindValue(':state', $source->getState(), \PDO::PARAM_STR);
+        $statement->bindValue(':name', $source->getName(), PDO::PARAM_STR);
 
         return $statement->execute();
     }
@@ -60,25 +60,12 @@ readonly class SourceRepository implements SourceRepositoryInterface
         $query = sprintf('DELETE FROM %s WHERE id = :id', $this->tableName);
         $statement = $this->PDO->prepare($query);
 
-        $statement->bindValue(':id', $source->getId(), \PDO::PARAM_INT);
+        $statement->bindValue(':id', $source->getId(), PDO::PARAM_INT);
         return $statement->execute();
     }
 
-    public function findAllByState(StateEnumInterface $state): iterable
+    private function mapRowToEntity(array $row): PaymentSource
     {
-        $query = sprintf('SELECT * FROM %s WHERE state = :state', $this->tableName);
-        $statement = $this->PDO->prepare($query);
-
-        $statement->bindValue(':state', $state->getValue(), \PDO::PARAM_STR);
-        $statement->execute();
-
-        while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
-            yield $this->mapRowToEntity($row);
-        }
-    }
-
-    private function mapRowToEntity(array $row): SourceInterface
-    {
-        return new Source($row['id'], $row['name']);
+        return new PaymentSource($row['id'], $row['name']);
     }
 }

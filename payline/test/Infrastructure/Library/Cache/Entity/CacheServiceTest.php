@@ -12,6 +12,7 @@ use Noritoshi\Payline\Infrastructure\Domain\BasicEntityInterface;
 use Noritoshi\Payline\Infrastructure\Library\Cache\CacheSystemInterface;
 use Noritoshi\Payline\Infrastructure\Library\Cache\Entity\CacheServiceCursor;
 use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionException;
 
 class CacheServiceTest extends TestCase
 {
@@ -28,7 +29,7 @@ class CacheServiceTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testConstructorInitializesCache(): void
     {
@@ -61,7 +62,7 @@ class CacheServiceTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testSaveCollectionInCacheWithSuccessful(): void
     {
@@ -125,7 +126,7 @@ class CacheServiceTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws Exception
      */
     public function testDestructorSavesCache(): void

@@ -17,7 +17,7 @@ interface LogRepositoryInterface extends BasicRepositoryInterface
 {
     /**
      * @param RelatedEntityCollectionInterface<V> $relatedEntityCollection
-     * @return LogEntityInterface
+     * @return iterable<LogEntityInterface<V, T>>
      */
     public function getAllForRelatedEntityCollection(RelatedEntityCollectionInterface $relatedEntityCollection): iterable;
 
@@ -29,12 +29,12 @@ interface LogRepositoryInterface extends BasicRepositoryInterface
 
     /**
      * @param SourceInterface $source
-     * @return LogEntityInterface
+     * @return iterable<LogEntityInterface<V, T>>
      */
     public function getAllForSource(SourceInterface $source): iterable;
 
     /**
-     * @return LogEntityInterface
+     * @return iterable<LogEntityInterface<V, T>>
      */
     public function findBySourceAndState(SourceInterface $source, StateEnumInterface $state): iterable;
 

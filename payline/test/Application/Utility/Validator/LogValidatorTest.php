@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Noritoshi\Payline\Test\Application\Utility\Validator;
 
+use DateTimeImmutable;
 use Noritoshi\Payline\Application\Exception\Validation\InvalidDateException;
 use Noritoshi\Payline\Application\Exception\Validation\InvalidLogStateEnumException;
 use Noritoshi\Payline\Application\Utility\Validator\LogValidator;
@@ -26,7 +27,7 @@ class LogValidatorTest extends TestCase
         $latestLogMock = EntityProvider::createLogEntityMock(
             $this->createMock(LogEntityInterface::class),
             1,
-            new \DateTimeImmutable('2023-10-10 10:00:00.0'),
+            new DateTimeImmutable('2023-10-10 10:00:00.0'),
             SampleStateEnum::INITIALIZED
         );
 
@@ -37,7 +38,7 @@ class LogValidatorTest extends TestCase
             $latestLogMock,
             $sourceMock,
             SampleStateEnum::PROCESSING,
-            new \DateTimeImmutable('2023-10-10 10:00:00.1234')
+            new DateTimeImmutable('2023-10-10 10:00:00.1234')
         ));
     }
 
@@ -50,7 +51,7 @@ class LogValidatorTest extends TestCase
         $latestLogMock = EntityProvider::createLogEntityMock(
             $this->createMock(LogEntityInterface::class),
             1,
-            new \DateTimeImmutable('2023-10-10 10:00:00.0'),
+            new DateTimeImmutable('2023-10-10 10:00:00.0'),
             SampleStateEnum::INITIALIZED
         );
 
@@ -64,7 +65,7 @@ class LogValidatorTest extends TestCase
             $latestLogMock,
             $sourceMock,
             SampleStateEnum::PROCESSING,
-            new \DateTimeImmutable('2023-10-10 10:01:00')
+            new DateTimeImmutable('2023-10-10 10:01:00')
         );
     }
 
@@ -80,7 +81,7 @@ class LogValidatorTest extends TestCase
         $latestLogMock = EntityProvider::createLogEntityMock(
             $this->createMock(LogEntityInterface::class),
             1,
-            new \DateTimeImmutable($latest),
+            new DateTimeImmutable($latest),
             SampleStateEnum::INITIALIZED
         );
 
@@ -94,7 +95,7 @@ class LogValidatorTest extends TestCase
             $latestLogMock,
             $sourceMock,
             SampleStateEnum::PROCESSING,
-            new \DateTimeImmutable($new)
+            new DateTimeImmutable($new)
         );
     }
 

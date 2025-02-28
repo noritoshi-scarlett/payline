@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Noritoshi\Payline\Test\Application\Utility\Sorter;
 
+use DateTimeImmutable;
 use Noritoshi\Payline\Application\Exception\InvalidArgumentException;
 use Noritoshi\Payline\Application\Utility\Sorter\EntitySorter;
 use Noritoshi\Payline\Application\Utility\Sorter\SortDirectionEnum;
@@ -20,10 +21,10 @@ class EntitySorterTest extends TestCase
      */
     public function testSortByDate(): void
     {
-        $entity1 = $this->createLogEntityMock(1, new \DateTimeImmutable('2021-01-01 00:00:00'));
-        $entity2 = $this->createLogEntityMock(2, new \DateTimeImmutable('2021-01-09 00:00:00'));
-        $entity3 = $this->createLogEntityMock(3, new \DateTimeImmutable('2021-01-05 00:00:00'));
-        $entity4 = $this->createLogEntityMock(4, new \DateTimeImmutable('2021-01-03 00:00:00'));
+        $entity1 = $this->createLogEntityMock(1, new DateTimeImmutable('2021-01-01 00:00:00'));
+        $entity2 = $this->createLogEntityMock(2, new DateTimeImmutable('2021-01-09 00:00:00'));
+        $entity3 = $this->createLogEntityMock(3, new DateTimeImmutable('2021-01-05 00:00:00'));
+        $entity4 = $this->createLogEntityMock(4, new DateTimeImmutable('2021-01-03 00:00:00'));
 
         $expectedForDescSort = [$entity2, $entity3, $entity4, $entity1];
         $expectedForAscSort = [$entity1, $entity4, $entity3, $entity2];
@@ -59,7 +60,7 @@ class EntitySorterTest extends TestCase
     /**
      * @throws Exception
      */
-    public function createLogEntityMock(int $id, \DateTimeImmutable $createdAt): LogEntityInterface
+    public function createLogEntityMock(int $id, DateTimeImmutable $createdAt): LogEntityInterface
     {
         return EntityProvider::createLogEntityMock(
             $this->createMock(LogEntityInterface::class),

@@ -11,6 +11,7 @@ use Noritoshi\Payline\Interface\Entity\Source\SourceInterface;
 use Noritoshi\Payline\Interface\Repository\LogRepositoryInterface;
 use Noritoshi\Payline\Example\Payment\Domain\Entity\PaymentLog;
 use Noritoshi\Payline\Example\Payment\Plugin\PayU\Domain\Entity\PayUPaymentLogEnum;
+use PDO;
 
 /**
  * @template T of object
@@ -20,7 +21,7 @@ use Noritoshi\Payline\Example\Payment\Plugin\PayU\Domain\Entity\PayUPaymentLogEn
 readonly class LogRepository implements LogRepositoryInterface
 {
     public function __construct(
-        private \PDO   $PDO,
+        private PDO   $PDO,
         private string $tableName,
     )
     {
@@ -36,18 +37,16 @@ readonly class LogRepository implements LogRepositoryInterface
             $query = sprintf('SELECT * FROM %s WHERE related_entity_collection_id = :relatedEntityCollectionId', $this->tableName);
             $statement = $this->PDO->prepare($query);
 
-            $statement->bindValue(':relatedEntityCollectionId', $relatedEntityCollection->getId(), \PDO::PARAM_INT);
+            $statement->bindValue(':relatedEntityCollectionId', $relatedEntityCollection->getId(), PDO::PARAM_INT);
 
             $statement->execute();
 
-            while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                 yield $this->mapRowToEntity($row);
             }
         } catch (\PDOException $e) {
             throw new \RuntimeException('Failed to fetch logs for related entity collection: ' . $e->getMessage(), 0, $e);
-        } catch (\DateMalformedStringException|\ValueError $e) {
-            //todo logger
-        } catch (EntityMappingException $e) {
+        } catch (\DateMalformedStringException|\ValueError|EntityMappingException $e) {
             //todo logger
         }
     }
@@ -85,12 +84,12 @@ readonly class LogRepository implements LogRepositoryInterface
             );
             $statement = $this->PDO->prepare($query);
 
-            $statement->bindValue(':sourceId', $source->getId(), \PDO::PARAM_INT);
-            $statement->bindValue(':state', $state->value, \PDO::PARAM_STR);
+            $statement->bindValue(':sourceId', $source->getId(), PDO::PARAM_INT);
+            $statement->bindValue(':state', $state->value, PDO::PARAM_STR);
 
             $statement->execute();
 
-            while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
                 yield $this->mapRowToEntity($row);
             }
         } catch (\PDOException $e) {
@@ -122,6 +121,9 @@ readonly class LogRepository implements LogRepositoryInterface
         throw new EntityMappingException('Failed to map row to entity');
     }
 
+    /**
+     * @param LogEntityInterface<V, T> $log
+     */
     public function save(LogEntityInterface $log): bool
     {
         try {
@@ -134,12 +136,12 @@ readonly class LogRepository implements LogRepositoryInterface
 
             $statement = $this->PDO->prepare($query);
 
-            $statement->bindValue(':sourceId', $log->getSource()->getId(), \PDO::PARAM_INT);
-            $statement->bindValue(':relatedEntityCollectionId', $log->getRelatedEntityCollection()->getId(), \PDO::PARAM_INT);
-            $statement->bindValue(':state', $log->getState()->value, \PDO::PARAM_STR);
-            $statement->bindValue(':data', $log->getRelatedEntityCollection()->getCalculatedDataHub()->serializeToJson(), \PDO::PARAM_STR);
-            $statement->bindValue(':createdAt', $log->getCreatedAt()->format('Y-m-d H:i:s'), \PDO::PARAM_STR);
-            $statement->bindValue(':message', $log->getMessage(), $log->getMessage() !== null ? \PDO::PARAM_STR : \PDO::PARAM_NULL);
+            $statement->bindValue(':sourceId', $log->getSource()->getId(), PDO::PARAM_INT);
+            $statement->bindValue(':relatedEntityCollectionId', $log->getRelatedEntityCollection()->getId(), PDO::PARAM_INT);
+            $statement->bindValue(':state', $log->getState()->value, PDO::PARAM_STR);
+            $statement->bindValue(':data', $log->getRelatedEntityCollection()->getCalculatedDataHub()->serializeToJson(), PDO::PARAM_STR);
+            $statement->bindValue(':createdAt', $log->getCreatedAt()->format('Y-m-d H:i:s'), PDO::PARAM_STR);
+            $statement->bindValue(':message', $log->getMessage(), $log->getMessage() !== null ? PDO::PARAM_STR : PDO::PARAM_NULL);
 
             return $statement->execute();
         } catch (\PDOException $e) {

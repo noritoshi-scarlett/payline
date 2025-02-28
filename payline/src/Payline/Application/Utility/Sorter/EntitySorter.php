@@ -11,8 +11,8 @@ use Noritoshi\Payline\Interface\Entity\LogEntity\LogEntityInterface;
  */
 class EntitySorter
 {
-    private const SORT_BY_DATE = 'sortByDate';
-    private const SORT_BY_ID = 'sortById';
+    private const string SORT_BY_DATE = 'sortByDate';
+    private const string SORT_BY_ID = 'sortById';
 
     /**
      * @param array<EntityType> $collection
@@ -26,7 +26,7 @@ class EntitySorter
     }
 
     /**
-     * @param array<EntityType> &$collection
+     * @param array<EntityType> $collection
      * @return array<EntityType>
      * @throws InvalidArgumentException
      */

@@ -76,4 +76,4 @@ class RedisCacheSystemTest extends TestCase
         $this->redisMock->method('set')->with('testKey', serialize($data))->willReturn(false);
         $this->assertFalse($this->cacheSystem->saveByKey('testKey', $data));
     }
-};
+}

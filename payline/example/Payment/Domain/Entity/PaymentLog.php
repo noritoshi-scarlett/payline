@@ -7,7 +7,6 @@ use Noritoshi\Payline\Domain\Entity\RelatedEntityCollection\RelatedEntityCollect
 use Noritoshi\Payline\Interface\Entity\LogEntity\LogEntityInterface;
 use Noritoshi\Payline\Interface\Entity\LogEntity\StateEnum\StateEnumInterface;
 use Noritoshi\Payline\Interface\Entity\Source\SourceInterface;
-use Noritoshi\Payline\Example\Payment\Plugin\PayU\Domain\Entity\PayUPaymentLogEnum;
 
 /**
  * @template T of object for DataHubEntityInterface
@@ -23,7 +22,7 @@ class PaymentLog implements LogEntityInterface
         private readonly int                              $id,
         private readonly SourceInterface                  $source,
         private readonly RelatedEntityCollectionInterface $relatedEntityCollection,
-        private readonly PayUPaymentLogEnum               $state,
+        private readonly StateEnumInterface               $state,
         private readonly \DateTimeImmutable               $createdAt,
         private ?string                                   $message = null,
     )

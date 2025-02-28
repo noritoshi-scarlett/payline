@@ -9,10 +9,10 @@ use Noritoshi\Payline\Interface\Entity\LogEntity\StateEnum\StateEnumGraphCheck;
 use Noritoshi\Payline\Interface\Entity\LogEntity\StateEnum\StateEnumInterface;
 use Noritoshi\Payline\Interface\Entity\Source\SourceInterface;
 
-class PaymentSource implements SourceInterface
+readonly class PaymentSource implements SourceInterface
 {
     public function __construct(
-        private int $id,
+        private int    $id,
         private string $name,
     )
     {

@@ -10,6 +10,6 @@ class RedisFactory
         $host = getenv('REDIS_HOST') ?: ($_ENV['REDIS_HOST'] ?? 'redis');
         $port = (int) (getenv('REDIS_PORT') ?: ($_ENV['REDIS_PORT'] ?? 6379));
 
-        return new RedisCacheSystem(new \Redis(), $host, $port);
+        return new RedisCacheSystem(new Redis(), $host, $port);
     }
 }

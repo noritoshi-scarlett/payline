@@ -6,11 +6,15 @@ require __DIR__ . '/autoload_functions.php';
 require __DIR__ . '/database.php';
 require __DIR__ . '/redis.php';
 
+use Noritoshi\Payline\Application\Factory\LogAbstractFactory;
 use Noritoshi\Payline\Example\Domain\Repository\LogRepository;
 use Noritoshi\Payline\Example\Domain\Repository\SourceRepository;
 use Noritoshi\Payline\Example\Payment\Application\Factory\PaymentLogFactory;
 use Noritoshi\Payline\Example\Payment\Domain\Entity\PaymentSource;
+use Noritoshi\Payline\Infrastructure\Library\Cache\CacheSystemInterface;
 use Noritoshi\Payline\Infrastructure\Library\Cache\RedisCacheSystem;
+use Noritoshi\Payline\Interface\Entity\Source\SourceInterface;
+use Noritoshi\Payline\Interface\Repository\LogRepositoryInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 $container = new ContainerBuilder();
@@ -26,10 +30,10 @@ $container
     ->setPublic(true);
 
 $interfaceToImplementationMap = [
-    \Noritoshi\Payline\Interface\Repository\LogRepositoryInterface::class => LogRepository::class,
-    \Noritoshi\Payline\Application\Factory\LogAbstractFactory::class => PaymentLogFactory::class,
-    \Noritoshi\Payline\Interface\Entity\Source\SourceInterface::class => PaymentSource::class,
-    \Noritoshi\Payline\Infrastructure\Library\Cache\CacheSystemInterface::class => RedisCacheSystem::class,
+    LogRepositoryInterface::class => LogRepository::class,
+    LogAbstractFactory::class => PaymentLogFactory::class,
+    SourceInterface::class => PaymentSource::class,
+    CacheSystemInterface::class => RedisCacheSystem::class,
 ];
 
 $classesToSkip = [RedisCacheSystem::class];

@@ -3,36 +3,39 @@ declare(strict_types=1);
 
 namespace Noritoshi\Payline\Test\TestDataProviders;
 
+use ReflectionClass;
+use ReflectionException;
+
 class ReflectionUtility
 {
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public static function getPrivateProperty(object $object, string $propertyName): mixed
     {
-        $reflection = new \ReflectionClass($object);
+        $reflection = new ReflectionClass($object);
         $property = $reflection->getProperty($propertyName);
         $property->setAccessible(true);
         return $property->getValue($object);
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public static function setPrivateProperty(object $object, string $propertyName, mixed $value): void
     {
-        $reflection = new \ReflectionClass($object);
+        $reflection = new ReflectionClass($object);
         $property = $reflection->getProperty($propertyName);
         $property->setAccessible(true);
         $property->setValue($object, $value);
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public static function callPrivateMethod(object $object, string $methodName, array $parameters = []): mixed
     {
-        $reflection = new \ReflectionClass($object);
+        $reflection = new ReflectionClass($object);
         $method = $reflection->getMethod($methodName);
         $method->setAccessible(true);
         return $method->invokeArgs($object, $parameters);
