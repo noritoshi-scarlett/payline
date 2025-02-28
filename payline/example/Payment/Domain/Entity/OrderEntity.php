@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Payline\Example\Payment\Domain\Entity;
+namespace Noritoshi\Payline\Example\Payment\Domain\Entity;
 
-use Payline\App\Interface\Entity\RelatedEntity\RelatedEntityInterface;
+use Noritoshi\Payline\Interface\Entity\RelatedEntity\RelatedEntityInterface;
 
 /**
  * @template V of object

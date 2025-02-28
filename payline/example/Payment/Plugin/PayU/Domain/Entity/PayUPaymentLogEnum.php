@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Payline\Example\Payment\Plugin\PayU\Domain\Entity;
+namespace Noritoshi\Payline\Example\Payment\Plugin\PayU\Domain\Entity;
 
-use Payline\App\Interface\Entity\LogEntity\StateEnum\StateEnumInterface;
+use Noritoshi\Payline\Interface\Entity\LogEntity\StateEnum\StateEnumInterface;
 
 enum PayUPaymentLogEnum: string implements StateEnumInterface
 {

@@ -1,19 +1,20 @@
 <?php
 declare(strict_types=1);
 
-namespace Payline\Test\Infrastructure\Library\Cache\Entity;
+namespace Noritoshi\Payline\Test\Infrastructure\Library\Cache\Entity;
 
-use Payline\App\Application\Exception\InvalidArgumentException;
-use Payline\App\Infrastructure\Domain\BasicEntityInterface;
-use Payline\App\Infrastructure\Library\Cache\Entity\CacheService;
-use Payline\App\Infrastructure\Library\Cache\Entity\CacheServiceCursor;
-use Payline\App\Infrastructure\Library\Cache\Entity\CacheServiceInterface;
+use Noritoshi\Payline\Application\Exception\InvalidArgumentException;
+use Noritoshi\Payline\Infrastructure\Domain\BasicEntityInterface;
+use Noritoshi\Payline\Infrastructure\Library\Cache\Entity\CacheService;
+use Noritoshi\Payline\Infrastructure\Library\Cache\Entity\CacheServiceCursor;
+use Noritoshi\Payline\Infrastructure\Library\Cache\Entity\CacheServiceInterface;
 use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CacheServiceCursorTest extends TestCase
 {
-    private CacheServiceInterface $cacheServiceMock;
+    private CacheServiceInterface&MockObject $cacheServiceMock;
 
     /**
      * @throws Exception

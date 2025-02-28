@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Payline\Example\Order\Domain\Entity;
+namespace Noritoshi\Payline\Example\Order\Domain\Entity;
 
 use Money\Money;
 

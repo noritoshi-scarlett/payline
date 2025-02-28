@@ -1,0 +1,3 @@
+/payline/example export-ignore
+/payline/test export-ignore
+!.gitattributes

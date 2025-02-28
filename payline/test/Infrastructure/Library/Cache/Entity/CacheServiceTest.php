@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Payline\Test\Infrastructure\Library\Cache\Entity;
+namespace Noritoshi\Payline\Test\Infrastructure\Library\Cache\Entity;
 
-use Payline\App\Infrastructure\Library\Cache\Entity\CacheService;
-use Payline\Test\DataProviders\ReflectionUtility;
+use Noritoshi\Payline\Infrastructure\Library\Cache\Entity\CacheService;
+use Noritoshi\Payline\Test\TestDataProviders\ReflectionUtility;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Payline\App\Application\Exception\InvalidArgumentException;
-use Payline\App\Infrastructure\Domain\BasicEntityInterface;
-use Payline\App\Infrastructure\Library\Cache\CacheSystemInterface;
-use Payline\App\Infrastructure\Library\Cache\Entity\CacheServiceCursor;
+use Noritoshi\Payline\Application\Exception\InvalidArgumentException;
+use Noritoshi\Payline\Infrastructure\Domain\BasicEntityInterface;
+use Noritoshi\Payline\Infrastructure\Library\Cache\CacheSystemInterface;
+use Noritoshi\Payline\Infrastructure\Library\Cache\Entity\CacheServiceCursor;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class CacheServiceTest extends TestCase
@@ -24,7 +24,7 @@ class CacheServiceTest extends TestCase
     protected function setUp(): void
     {
         $this->cacheSystemMock = $this->createMock(CacheSystemInterface::class);
-        $this->cacheService = new CacheService($this->cacheSystemMock, 'test_namespace');
+        $this->cacheService = new CacheService($this->cacheSystemMock, 'test_namespace', true);
     }
 
     /**
@@ -47,7 +47,7 @@ class CacheServiceTest extends TestCase
                 };
         });
 
-        $this->cacheService = new CacheService($this->cacheSystemMock, 'reinitialized_namespace');
+        $this->cacheService = new CacheService($this->cacheSystemMock, 'reinitialized_namespace', false);
         $cached = ReflectionUtility::getPrivateProperty($this->cacheService, 'cache');
         $this->assertSame(array_keys($cacheStructure), array_keys($cached));
         foreach ($cached as $key => $stored) {

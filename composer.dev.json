@@ -1,0 +1,32 @@
+{
+    "name": "noritoshi/payline",
+    "description": "This is a simple module for handling logs, e.g. payment transactions.",
+    "version": "1.0.0",
+    "type": "library",
+    "require": {
+        "php": ">=8.4",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "ext-pdo": "*",
+        "ext-redis": "*",
+        "symfony/dependency-injection": "7.3.x-dev",
+        "moneyphp/money": "3.x-dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Noritoshi\\Payline\\": "payline/src/Payline/",
+            "Noritoshi\\Payline\\Test\\": "payline/test/",
+            "Noritoshi\\Payline\\Example\\": "payline/example/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require-dev": {
+        "phpunit/phpunit": "^12.1@dev"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:noritoshi-scarlett/payline.git"
+        }
+    ]
+}

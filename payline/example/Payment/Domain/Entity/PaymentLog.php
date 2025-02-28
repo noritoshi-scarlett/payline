@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Payline\Example\Payment\Domain\Entity;
+namespace Noritoshi\Payline\Example\Payment\Domain\Entity;
 
-use Payline\App\Domain\Entity\RelatedEntityCollection\RelatedEntityCollectionInterface;
-use Payline\App\Interface\Entity\LogEntity\LogEntityInterface;
-use Payline\App\Interface\Entity\LogEntity\StateEnum\StateEnumInterface;
-use Payline\App\Interface\Entity\Source\SourceInterface;
-use Payline\Example\Payment\Plugin\PayU\Domain\Entity\PayUPaymentLogEnum;
+use Noritoshi\Payline\Domain\Entity\RelatedEntityCollection\RelatedEntityCollectionInterface;
+use Noritoshi\Payline\Interface\Entity\LogEntity\LogEntityInterface;
+use Noritoshi\Payline\Interface\Entity\LogEntity\StateEnum\StateEnumInterface;
+use Noritoshi\Payline\Interface\Entity\Source\SourceInterface;
+use Noritoshi\Payline\Example\Payment\Plugin\PayU\Domain\Entity\PayUPaymentLogEnum;
 
 /**
  * @template T of object for DataHubEntityInterface

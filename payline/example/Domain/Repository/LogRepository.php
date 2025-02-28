@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Payline\Example\Domain\Repository;
+namespace Noritoshi\Payline\Example\Domain\Repository;
 
-use Payline\App\Application\Exception\EntityMappingException;
-use Payline\App\Domain\Entity\RelatedEntityCollection\RelatedEntityCollectionInterface;
-use Payline\App\Interface\Entity\LogEntity\LogEntityInterface;
-use Payline\App\Interface\Entity\LogEntity\StateEnum\StateEnumInterface;
-use Payline\App\Interface\Entity\Source\SourceInterface;
-use Payline\App\Interface\Repository\LogRepositoryInterface;
-use Payline\Example\Payment\Domain\Entity\PaymentLog;
-use Payline\Example\Payment\Plugin\PayU\Domain\Entity\PayUPaymentLogEnum;
+use Noritoshi\Payline\Application\Exception\EntityMappingException;
+use Noritoshi\Payline\Domain\Entity\RelatedEntityCollection\RelatedEntityCollectionInterface;
+use Noritoshi\Payline\Interface\Entity\LogEntity\LogEntityInterface;
+use Noritoshi\Payline\Interface\Entity\LogEntity\StateEnum\StateEnumInterface;
+use Noritoshi\Payline\Interface\Entity\Source\SourceInterface;
+use Noritoshi\Payline\Interface\Repository\LogRepositoryInterface;
+use Noritoshi\Payline\Example\Payment\Domain\Entity\PaymentLog;
+use Noritoshi\Payline\Example\Payment\Plugin\PayU\Domain\Entity\PayUPaymentLogEnum;
 
 /**
  * @template T of object
@@ -137,7 +137,7 @@ readonly class LogRepository implements LogRepositoryInterface
             $statement->bindValue(':sourceId', $log->getSource()->getId(), \PDO::PARAM_INT);
             $statement->bindValue(':relatedEntityCollectionId', $log->getRelatedEntityCollection()->getId(), \PDO::PARAM_INT);
             $statement->bindValue(':state', $log->getState()->value, \PDO::PARAM_STR);
-            $statement->bindValue(':data', $log->getRelatedEntityCollection()->getDataHub()->serializeToJson(), \PDO::PARAM_STR);
+            $statement->bindValue(':data', $log->getRelatedEntityCollection()->getCalculatedDataHub()->serializeToJson(), \PDO::PARAM_STR);
             $statement->bindValue(':createdAt', $log->getCreatedAt()->format('Y-m-d H:i:s'), \PDO::PARAM_STR);
             $statement->bindValue(':message', $log->getMessage(), $log->getMessage() !== null ? \PDO::PARAM_STR : \PDO::PARAM_NULL);
 

@@ -5,11 +5,11 @@ class PdoFactory
 {
     public static function create(): \PDO
     {
-        $host = getenv('DB_HOST');
-        $port = getenv('DB_PORT');
-        $dbName = getenv('DB_NAME');
-        $username = getenv('DB_USER');
-        $password = getenv('DB_PASSWORD');
+        $host = getenv('DB_HOST') ?: 'db';
+        $port = getenv('DB_PORT') ?: '3306';
+        $dbName = getenv('DB_NAME') ?: $_ENV['MYSQL_DATABASE'];
+        $username = getenv('DB_USER') ?: $_ENV['MYSQL_USER'];
+        $password = getenv('DB_PASSWORD') ?: $_ENV['MYSQL_PASSWORD'];
 
         $dsn = "mysql:host={$host}:{$port};dbname={$dbName};charset=utf8mb4";
 

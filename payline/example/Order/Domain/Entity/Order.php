@@ -1,6 +1,6 @@
 <?php
 
-namespace Payline\Example\Order\Domain\Entity;
+namespace Noritoshi\Payline\Example\Order\Domain\Entity;
 
 class Order
 {

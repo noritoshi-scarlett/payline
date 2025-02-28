@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Payline\Example\Payment\Domain\Entity;
+namespace Noritoshi\Payline\Example\Payment\Domain\Entity;
 
-use Payline\App\Application\Exception\Validation\InvalidLogStateEnumException;
-use Payline\App\Interface\Entity\LogEntity\LogEntityInterface;
-use Payline\App\Interface\Entity\LogEntity\StateEnum\StateEnumGraphCheck;
-use Payline\App\Interface\Entity\LogEntity\StateEnum\StateEnumInterface;
-use Payline\App\Interface\Entity\Source\SourceInterface;
+use Noritoshi\Payline\Application\Exception\Validation\InvalidLogStateEnumException;
+use Noritoshi\Payline\Interface\Entity\LogEntity\LogEntityInterface;
+use Noritoshi\Payline\Interface\Entity\LogEntity\StateEnum\StateEnumGraphCheck;
+use Noritoshi\Payline\Interface\Entity\LogEntity\StateEnum\StateEnumInterface;
+use Noritoshi\Payline\Interface\Entity\Source\SourceInterface;
 
 class PaymentSource implements SourceInterface
 {

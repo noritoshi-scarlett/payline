@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace Payline\Example\Domain\Repository;
+namespace Noritoshi\Payline\Example\Domain\Repository;
 
-use Payline\App\Interface\Entity\LogEntity\StateEnum\StateEnumInterface;
-use Payline\App\Interface\Entity\Source\SourceInterface;
-use Payline\App\Interface\Repository\SourceRepositoryInterface;
+use Noritoshi\Payline\Interface\Entity\LogEntity\StateEnum\StateEnumInterface;
+use Noritoshi\Payline\Interface\Entity\Source\SourceInterface;
+use Noritoshi\Payline\Interface\Repository\SourceRepositoryInterface;
 
-class SourceRepository implements SourceRepositoryInterface
+readonly class SourceRepository implements SourceRepositoryInterface
 {
     public function __construct(
-        private readonly \PDO $PDO,
-        private readonly string $tableName
+        private \PDO   $PDO,
+        private string $tableName
     ) {}
 
     public function getAll(): iterable

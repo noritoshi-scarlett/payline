@@ -1,14 +1,14 @@
 <?php
 
-namespace Payline\Example\Payment\Application\Factory;
+namespace Noritoshi\Payline\Example\Payment\Application\Factory;
 
 use Override;
-use Payline\App\Application\Factory\LogAbstractFactory;
-use Payline\App\Domain\Entity\RelatedEntityCollection\RelatedEntityCollectionInterface;
-use Payline\App\Interface\Entity\LogEntity\LogEntityInterface;
-use Payline\App\Interface\Entity\LogEntity\StateEnum\StateEnumInterface;
-use Payline\App\Interface\Entity\Source\SourceInterface;
-use Payline\Example\Payment\Domain\Entity\PaymentLog;
+use Noritoshi\Payline\Application\Factory\LogAbstractFactory;
+use Noritoshi\Payline\Domain\Entity\RelatedEntityCollection\RelatedEntityCollectionInterface;
+use Noritoshi\Payline\Interface\Entity\LogEntity\LogEntityInterface;
+use Noritoshi\Payline\Interface\Entity\LogEntity\StateEnum\StateEnumInterface;
+use Noritoshi\Payline\Interface\Entity\Source\SourceInterface;
+use Noritoshi\Payline\Example\Payment\Domain\Entity\PaymentLog;
 
 /**
  * @template T of object

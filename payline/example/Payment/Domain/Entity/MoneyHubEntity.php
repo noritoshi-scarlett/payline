@@ -1,24 +1,23 @@
 <?php
 declare(strict_types=1);
 
-namespace Payline\Example\Payment\Domain\Entity;
+namespace Noritoshi\Payline\Example\Payment\Domain\Entity;
 
 use Money\Currency;
 use Money\Money;
-use Payline\App\Interface\Entity\DataHubEntity\DataHubEntityInterface;
+use Noritoshi\Payline\Interface\Entity\DataHubEntity\DataHubEntityInterface;
 
 /**
- * @template T of object for $money representation.
- * @template-implements DataHubEntityInterface<T>
+ * @template-implements DataHubEntityInterface<Money>
  */
 readonly class MoneyHubEntity implements DataHubEntityInterface
 {
     /**
-     * @param T $money
+     * @param Money $money
      */
     public function __construct(
         private int    $id,
-        private object $money,
+        private Money $money,
     )
     {
     }
@@ -28,10 +27,7 @@ readonly class MoneyHubEntity implements DataHubEntityInterface
         return $this->id;
     }
 
-    /**
-     * @return T
-     */
-    public function getDataObject(): object
+    public function getDataObject(): Money
     {
        return $this->money;
     }
@@ -41,14 +37,13 @@ readonly class MoneyHubEntity implements DataHubEntityInterface
         return json_encode($this->money);
     }
 
-    /**
-     * @return T
-     */
-    public static function deserializeFromJson(string $json): object
+    public static function deserializeFromJson(string $json): Money
     {
         $data = json_decode($json, true);
 
-        //@TODO
-        return new Money($data['amount'], new Currency($data['currency']['code']));
+        return new Money(
+            $data['amount'],
+            new Currency($data['currency']['code'])
+        );
     }
 }

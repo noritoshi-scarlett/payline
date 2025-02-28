@@ -1,37 +1,38 @@
 <?php
 declare(strict_types=1);
 
-namespace Payline\Example\Payment\Application\Controller;
+namespace Noritoshi\Payline\Example\Payment\Application\Controller;
 
 use Money\Currency;
 use Money\Money;
-use Payline\App\Application\Exception\InvalidArgumentException;
-use Payline\App\Application\Exception\Validation\InvalidLogStateEnumException;
-use Payline\App\Application\Manager\RelatedEntityCollectionLogsManager;
-use Payline\App\Domain\Model\RelatedEntityCollection;
-use Payline\App\Interface\Entity\DataHubEntity\DataHubEntityInterface;
-use Payline\App\Interface\Entity\RelatedEntity\RelatedEntityInterface;
-use Payline\Example\Order\Domain\Entity\Order;
-use Payline\Example\Order\Domain\Entity\OrderPrice;
-use Payline\Example\Payment\Domain\Entity\MoneyHubEntity;
-use Payline\Example\Payment\Domain\Entity\OrderEntity;
-use Payline\Example\Payment\Domain\Entity\PaymentSource;
-use Payline\Example\Payment\Plugin\PayU\Domain\Entity\PayUPaymentLogEnum;
+use Noritoshi\Payline\Application\Exception\InvalidArgumentException;
+use Noritoshi\Payline\Application\Exception\Validation\InvalidDateException;
+use Noritoshi\Payline\Application\Exception\Validation\InvalidLogStateEnumException;
+use Noritoshi\Payline\Application\Factory\CacheServiceFactory;
+use Noritoshi\Payline\Application\Manager\RelatedEntityCollectionLogsManager;
+use Noritoshi\Payline\Domain\Entity\RelatedEntityCollection\RelatedEntityCollection;
+use Noritoshi\Payline\Interface\Entity\DataHubEntity\DataHubEntityInterface;
+use Noritoshi\Payline\Interface\Entity\RelatedEntity\RelatedEntityInterface;
+use Noritoshi\Payline\Example\Domain\Repository\LogRepository;
+use Noritoshi\Payline\Example\Order\Domain\Entity\Order;
+use Noritoshi\Payline\Example\Order\Domain\Entity\OrderPrice;
+use Noritoshi\Payline\Example\Payment\Application\Factory\PaymentLogFactory;
+use Noritoshi\Payline\Example\Payment\Domain\Entity\MoneyHubEntity;
+use Noritoshi\Payline\Example\Payment\Domain\Entity\OrderEntity;
+use Noritoshi\Payline\Example\Payment\Domain\Entity\PaymentLog;
+use Noritoshi\Payline\Example\Payment\Domain\Entity\PaymentSource;
+use Noritoshi\Payline\Example\Payment\Plugin\PayU\Domain\Entity\PayUPaymentLogEnum;
 
 class Controller
 {
-    /**
-     * @param RelatedEntityCollectionLogsManager<Money, Order> $relatedEntityCollectionLogsManager
-     */
     public function __construct(
-        private readonly RelatedEntityCollectionLogsManager $relatedEntityCollectionLogsManager
+        private readonly LogRepository $logRepository,
+        private readonly PaymentLogFactory $logFactory,
+        private readonly CacheServiceFactory $cacheServiceFactory,
     )
     {
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function addNewLogForSingleOrder(): void
     {
         $orderOne = new Order(1, ['name' => 'test'], new OrderPrice(
@@ -51,7 +52,7 @@ class Controller
             ],
         );
 
-        $orderCollection->calculateDataHub(
+        $orderCollection->setDataHubByCalculation(
             /**
              * @param RelatedEntityInterface<Order> $relatedEntity
              */
@@ -64,24 +65,46 @@ class Controller
         );
 
         $source = new PaymentSource(1, 'Platnosc-ZBZIK-owana');
-        $state = PayUPaymentLogEnum::PENDING;
+
+        /** @var RelatedEntityCollectionLogsManager<PaymentLog<Order, Money>> $relatedEntityCollectionLogsManager */
+        $relatedEntityCollectionLogsManager = new RelatedEntityCollectionLogsManager(
+            $this->logRepository,
+            $this->logFactory,
+            PaymentLog::class,
+            $this->cacheServiceFactory
+        );
 
         try {
-            $log = $this->relatedEntityCollectionLogsManager->createLog(
+            $log = $relatedEntityCollectionLogsManager->createLog(
                 $source,
                 $orderCollection,
-                $state,
+                PayUPaymentLogEnum::PENDING,
                 'New log with PENDING for single order',
                 new \DateTimeImmutable()
             );
-            /** @var RelatedEntityInterface<Order> $firstRelatedEntity */
-            $firstRelatedEntity = $log->getRelatedEntityCollection()->getRelatedEntity(0)->getCoreEntity();
-            $firstRelatedEntity->getCoreEntity()->getOrderPrice();
-        } catch (InvalidLogStateEnumException $e) {
-            // Handle exception
-        } catch (InvalidArgumentException $e) {
-            // TODO
+            /** @var Order $coreEntity */
+            $coreEntity = $log->getRelatedEntityCollection()->getRelatedEntity(0)->getCoreEntity();
+            echo 'Price: ' . $coreEntity->getOrderPrice()->discountPrice->getAmount() . PHP_EOL;
+        } catch (InvalidLogStateEnumException|InvalidArgumentException|InvalidDateException $e) {
+            echo 'Error message: ' . $e->getMessage() . PHP_EOL;
         }
+
+
+        try {
+            $log = $relatedEntityCollectionLogsManager->createLog(
+                $source,
+                $orderCollection,
+                PayUPaymentLogEnum::NEW,
+                'New log with NEW for single order',
+                new \DateTimeImmutable()
+            );
+            /** @var Order $coreEntity */
+            $coreEntity = $log->getRelatedEntityCollection()->getRelatedEntity(0)->getCoreEntity();
+            echo 'Price: ' . $coreEntity->getOrderPrice()->discountPrice->getAmount() . PHP_EOL;
+        } catch (InvalidLogStateEnumException|InvalidArgumentException|InvalidDateException $e) {
+            echo 'Error message: ' . $e->getMessage() . PHP_EOL;
+        }
+
 
     }
 }

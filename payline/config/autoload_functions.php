@@ -1,15 +1,17 @@
 <?php
+declare(strict_types=1);
 
-use Payline\App\Infrastructure\Domain\BasicEntityInterface;
+use Noritoshi\Payline\Infrastructure\Domain\BasicEntityInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 function autoloading(
     ContainerBuilder $container,
     array $interfaceToImplementationMap,
+    array $classesToSkip,
     array $argumentMapping,
     string $namespace,
     string $directory
-)
+): void
 {
     $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory));
     foreach ($files as $file) {
@@ -25,23 +27,29 @@ function autoloading(
                     continue;
                 }
 
+                $isAutowire = !str_contains($className, 'Noritoshi\Payline\Application\Manager');
                 $isPublic = (str_contains($className, '\Controller')
                     || str_contains($className, '\Service')
                     || str_contains($className, '\Manager')
                 );
-
-                $definition = $container
-                    ->register($className, $className)
-                    ->setAutowired(true)
-                    ->setAutoconfigured(true)
-                    ->setPublic($isPublic);
-
-                // Interfece mapping
+                // Interface mapping
                 foreach ($interfaceToImplementationMap as $interface => $implementation) {
                     if ($className === $implementation) {
                         $container->setAlias($interface, $implementation)->setPublic($isPublic);
                     }
                 }
+                //Skip Mapping
+                foreach ($classesToSkip as $classToSkip) {
+                    if ($className === $classToSkip) {
+                        continue 2;
+                    }
+                }
+                // Build definition
+                $definition = $container
+                    ->register($className, $className)
+                    ->setAutowired($isAutowire)
+                    ->setAutoconfigured(true)
+                    ->setPublic($isPublic);
 
                 // Table names mapping
                 if (isset($argumentMapping[$className])) {
@@ -49,10 +57,7 @@ function autoloading(
                         $definition->setArgument($argumentName, $argumentValue);
                     }
                 }
-
-
             }
-
         }
     }
 }
